@@ -76,12 +76,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
 // On first load, show home view
 showLoading("#main-content");
 $ajaxUtils.sendGetRequest(
-  homeHtml,
-  function (responseText) {
-    document.querySelector("#main-content")
-      .innerHTML = responseText;
-  },
-  false);
+  allCategoriesUrl,
+  buildAndShowHomeHTML,
+  true);
 });
 
 
@@ -92,12 +89,10 @@ function buildAndShowHomeHTML (categories) {
     homeHtmlUrl,
     function (homeHtml) {
 
-      switchMenuToActive();
-
-      var randomCategoryShortName = 
-        chooseRandomCategory(categories,
-                             homeHtml);
-      insertHtml("#main-content", randomCategoryShortName);      
+      var chosenCategoryShortName = chooseRandomCategory (categories).short_name;
+      chosenCategoryShortName = "'" + chosenCategoryShortName + "'";
+      var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, "randomCategoryShortName", chosenCategoryShortName);
+      insertHtml("#main-content", homeHtmlToInsertIntoMainPage);   
     },
     false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
 }
